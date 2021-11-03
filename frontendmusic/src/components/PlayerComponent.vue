@@ -1,11 +1,13 @@
 <template>
   <div class="mobile-screen">
     <b-container>
+      <youtube :video-id="videoId" ref="youtube" @playing="playing"></youtube>
+      <button @click="playVideo">play</button>
       <b-row>
         <b-col>
           <ul v-if="info">
             <li v-for="(item, index) in info.items" :key="index.etag">
-              <p class="text">{{ item.snippet.title }}</p>
+              <p class="text">{{ item.snippet.videoId }}</p>
             </li>
           </ul>
         </b-col>
@@ -15,7 +17,7 @@
 </template>
 
 <script>
-import axios from "axios";
+//import axios from "axios";
 export default {
   name: "PlayerComponent",
   props: {
@@ -24,14 +26,22 @@ export default {
   data() {
     return {
       info: null,
+      videoId: "lG0Ys-2d4MA",
     };
   },
-  mounted() {
-    axios
-      .get(
-        "https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=treysongz&key=AIzaSyDtcPvVyjnxX--cDD2MHwRs649zHEx3ij4"
-      )
-      .then((response) => (this.info = response.data));
+  mounted() {},
+  methods: {
+    playVideo() {
+      this.player.playVideo();
+    },
+    playing() {
+      console.log(" we are watching!!!");
+    },
+  },
+  computed: {
+    player() {
+      return this.$refs.youtube.player;
+    },
   },
 };
 </script>
