@@ -31,6 +31,10 @@
               <p class="text" @click="addVideo(item.id.videoId)">
                 {{ item.snippet.title }}
               </p>
+              <button
+                class="btn btn-info"
+                @click="videoToPlaylist(item.id.videoId)"
+              />
             </b-col>
           </li>
         </ul>
@@ -93,6 +97,13 @@ export default {
       this.videoId = id;
       console.log(id);
       console.log(this.videoId);
+      this.$emit("updateVideoId", this.videoId);
+    },
+    videoToPlaylist(payload) {
+      console.log(this.videoId);
+      this.videoId = payload;
+      this.$store.dispatch("addTodo", payload);
+      console.log(this.$store.state.playlist);
     },
   },
   computed: {

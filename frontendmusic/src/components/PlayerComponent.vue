@@ -1,8 +1,13 @@
 <template>
   <div class="mobile-screen">
     <b-container>
+      <search-component v-on:updateVideoId="updateVideoId($event)" />
+
       <youtube :video-id="videoId" ref="youtube" @playing="playing"></youtube>
+
       <button @click="playVideo">play</button>
+      <button @click="stopVideo">stop</button>
+      <button @click="nextVideo">next</button>
       <b-row>
         <b-col>
           <ul v-if="info">
@@ -17,8 +22,10 @@
 </template>
 
 <script>
+import SearchComponent from "./SearchComponent.vue";
 //import axios from "axios";
 export default {
+  components: { SearchComponent },
   name: "PlayerComponent",
   props: {
     msg: String,
@@ -31,8 +38,17 @@ export default {
   },
   mounted() {},
   methods: {
+    updateVideoId(payload) {
+      this.videoId = payload;
+    },
+    nextVideo() {
+      this.player.nextVideo();
+    },
     playVideo() {
       this.player.playVideo();
+    },
+    stopVideo() {
+      this.player.stopVideo();
     },
     playing() {
       console.log(" we are watching!!!");
