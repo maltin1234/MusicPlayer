@@ -1,10 +1,14 @@
 <template>
   <div class="mobile-screen">
     <b-container>
-      <search-component v-on:updateVideoId="updateVideoId($event)" />
+      <search-component
+        v-on:updateVideoId="updateVideoId($event)"
+        v-on:videoListIds="videoListIds($event)"
+      />
 
       <youtube :video-id="videoId" ref="youtube" @playing="playing"></youtube>
 
+      <button @click="prevVideo">previous</button>
       <button @click="playVideo">play</button>
       <button @click="stopVideo">stop</button>
       <button @click="nextVideo">next</button>
@@ -33,7 +37,8 @@ export default {
   data() {
     return {
       info: null,
-      videoId: "lG0Ys-2d4MA",
+      playlistIds: null,
+      videoId: null,
     };
   },
   mounted() {},
@@ -41,8 +46,25 @@ export default {
     updateVideoId(payload) {
       this.videoId = payload;
     },
+
+    videoListIds(payload) {
+      this.playlistIds = payload;
+
+      console.log(payload, "payload");
+    },
     nextVideo() {
-      this.player.nextVideo();
+      let index = this.playlistIds.indexOf(this.videoId) + 1;
+      console.log(this.playlistIds[index]);
+      this.videoId = this.playlistIds[index];
+    },
+    prevVideo() {
+      if (this.playlistIds.indexOf(this.videoId) >= 1) {
+        let index = this.playlistIds.indexOf(this.videoId) + -1;
+        console.log(this.playlistIds[index]);
+        this.videoId = this.playlistIds[index];
+      } else {
+        console.log("error");
+      }
     },
     playVideo() {
       this.player.playVideo();

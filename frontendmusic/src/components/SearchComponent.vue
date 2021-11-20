@@ -9,6 +9,19 @@
               placeholder="Search"
               v-model="keyWord"
             ></b-form-input>
+            <div>
+              <b-form-select
+                v-model="selected"
+                :options="options"
+                class="mb-3"
+                value-field="item"
+                text-field="name"
+                disabled-field="notEnabled"
+              ></b-form-select>
+              <div class="mt-3">
+                Selected: <strong>{{ selected }}</strong>
+              </div>
+            </div>
             <b-button
               @click="search(keyWord)"
               variant="outline-success"
@@ -31,7 +44,7 @@
               <p class="text" @click="addVideo(item.id.videoId)">
                 {{ item.snippet.title }}
               </p>
-              <button
+              <b-button
                 class="btn btn-info"
                 @click="videoToPlaylist(item.id.videoId)"
               />
@@ -42,6 +55,11 @@
     </b-container>
     {{ searchVideo }}
     {{ keyWord }}
+    <b-button
+      variant="outline-success"
+      class="my-2 my-sm-0"
+      @click="videoListIds()"
+    ></b-button>
   </div>
 </template>
 
@@ -52,13 +70,23 @@ export default {
   props: {
     msg: String,
   },
-  data: () => ({
-    info: null,
-    videoId: "s7pCASi_JhA",
-    searchVideo: null,
-    keyWord: "",
-    selected: false,
-  }),
+  data() {
+    return {
+      info: null,
+      videoId: "s7pCASi_JhA",
+      searchVideo: null,
+      keyWord: "",
+      result: null,
+
+      selected: "A",
+      options: [
+        { item: "A", name: "Option A" },
+        { item: "B", name: "Option B" },
+        { item: "D", name: "Option C", notEnabled: true },
+        { item: { d: 1 }, name: "Option D" },
+      ],
+    };
+  },
   // created: function () {
   //   const _ = require("lodash");
   //   // _.debounce is a function provided by lodash to limit how
@@ -87,24 +115,28 @@ export default {
         })
         .then((response) => (this.info = response.data));
     },
-    playVideo() {
-      this.player.playVideo();
+
+    videoListIds() {
+      console.log("info", this.info);
+
+      const result = this.info.items.map((x) => x.id.videoId);
+      console.log(result);
+      this.$emit("videoListIds", result);
     },
-    playing() {
-      console.log(" we are watching!!!");
-    },
+
     addVideo(id) {
       this.videoId = id;
       console.log(id);
       console.log(this.videoId);
       this.$emit("updateVideoId", this.videoId);
     },
-    videoToPlaylist(payload) {
-      console.log(this.videoId);
-      this.videoId = payload;
-      this.$store.dispatch("addTodo", payload);
-      console.log(this.$store.state.playlist);
-    },
+    // videoToPlaylist(payload) {
+    //   console.log(this.videoId);
+    //   this.videoId = payload;
+
+    //   this.$store.dispatch("addTodo", payload);
+    //   console.log(this.$store.state.playlist);
+    // },
   },
   computed: {
     player() {
