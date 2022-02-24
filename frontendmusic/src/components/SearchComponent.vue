@@ -2,26 +2,14 @@
   <div class="mobile-screen">
     <b-container>
       <div>
-        <b-navbar type="light" variant="light">
+        <b-navbar type="dark" variant="dark">
           <b-nav-form>
             <b-form-input
               class="mr-sm-2"
               placeholder="Search"
               v-model="keyWord"
             ></b-form-input>
-            <div>
-              <b-form-select
-                v-model="selected"
-                :options="options"
-                class="mb-3"
-                value-field="item"
-                text-field="name"
-                disabled-field="notEnabled"
-              ></b-form-select>
-              <div class="mt-3">
-                Selected: <strong>{{ selected }}</strong>
-              </div>
-            </div>
+            <div></div>
             <b-button
               @click="search(keyWord)"
               variant="outline-success"
@@ -30,36 +18,26 @@
             >
           </b-nav-form>
         </b-navbar>
-        {{ videoId }}
       </div>
 
+      <slot name="name"> Hello</slot>
+
       <b-row>
-        <ul v-if="info" class="list-group">
+        <ul v-if="info" class="list-group mx-auto">
           <li
             v-for="(item, index) in info.items"
             :key="index.etag"
-            class="list-group-item"
+            class="list-group-item list-items"
           >
-            <b-col cols="12">
+            <b-col cols="12" class="">
               <p class="text" @click="addVideo(item.id.videoId)">
                 {{ item.snippet.title }}
               </p>
-              <b-button
-                class="btn btn-info"
-                @click="videoToPlaylist(item.id.videoId)"
-              />
             </b-col>
           </li>
         </ul>
       </b-row>
     </b-container>
-    {{ searchVideo }}
-    {{ keyWord }}
-    <b-button
-      variant="outline-success"
-      class="my-2 my-sm-0"
-      @click="videoListIds()"
-    ></b-button>
   </div>
 </template>
 
@@ -80,10 +58,8 @@ export default {
 
       selected: "A",
       options: [
-        { item: "A", name: "Option A" },
-        { item: "B", name: "Option B" },
-        { item: "D", name: "Option C", notEnabled: true },
-        { item: { d: 1 }, name: "Option D" },
+        { item: "playList", name: "Option A" },
+        { item: "artist", name: "Option B" },
       ],
     };
   },
@@ -116,19 +92,15 @@ export default {
         .then((response) => (this.info = response.data));
     },
 
-    videoListIds() {
-      console.log("info", this.info);
-
-      const result = this.info.items.map((x) => x.id.videoId);
-      console.log(result);
-      this.$emit("videoListIds", result);
-    },
-
     addVideo(id) {
       this.videoId = id;
       console.log(id);
       console.log(this.videoId);
       this.$emit("updateVideoId", this.videoId);
+      console.log("info", this.info);
+      const result = this.info.items.map((x) => x.id.videoId);
+      console.log(result);
+      this.$emit("videoListIds", result);
     },
     // videoToPlaylist(payload) {
     //   console.log(this.videoId);
@@ -163,15 +135,11 @@ li {
 a {
   color: #42b983;
 }
-.row {
-  border: 3px solid red;
+.list-items {
+  background-color: #0000006b !important;
+  width: 800px;
 }
-.col {
-  border: 3px dotted blue;
-}
-.container {
-  border: 1px solid yellow;
-}
+
 .player {
   height: 100vh;
   width: 100vw;
@@ -193,6 +161,6 @@ a {
   }
 }
 .text {
-  color: rgb(5, 1, 1);
+  color: rgb(250, 245, 245);
 }
 </style>

@@ -4,23 +4,42 @@
       <search-component
         v-on:updateVideoId="updateVideoId($event)"
         v-on:videoListIds="videoListIds($event)"
-      />
+      >
+        <template v-slot:name>
+          <youtube
+            :video-id="videoId"
+            ref="youtube"
+            @playing="playing"
+          ></youtube>
 
-      <youtube :video-id="videoId" ref="youtube" @playing="playing"></youtube>
-
-      <button @click="prevVideo">previous</button>
-      <button @click="playVideo">play</button>
-      <button @click="stopVideo">stop</button>
-      <button @click="nextVideo">next</button>
-      <b-row>
-        <b-col>
-          <ul v-if="info">
-            <li v-for="(item, index) in info.items" :key="index.etag">
-              <p class="text">{{ item.snippet.videoId }}</p>
-            </li>
-          </ul>
-        </b-col>
-      </b-row>
+          <div class="playbar">
+            <div class="navbar navbar-dark bg-dark">
+              <div class="row mx-auto">
+                <div class="col col-3">
+                  <button class="play-buttons" @click="prevVideo">
+                    <i class="bi bi-arrow-left-square-fill fa-2x"></i>
+                  </button>
+                </div>
+                <div class="col col-3">
+                  <button class="play-buttons" @click="playVideo">
+                    <i class="bi bi-play-circle fa-2x"></i>
+                  </button>
+                </div>
+                <div class="col col-3">
+                  <button class="play-buttons" @click="stopVideo">
+                    <i class="bi bi-pause-fill fa-2x"></i>
+                  </button>
+                </div>
+                <div class="col col-3">
+                  <button class="play-buttons" @click="nextVideo">
+                    <i class="bi bi-arrow-right-square-fill fa-4x"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </search-component>
     </b-container>
   </div>
 </template>
@@ -53,7 +72,9 @@ export default {
       console.log(payload, "payload");
     },
     nextVideo() {
+      console.log(this.playlistIds);
       let index = this.playlistIds.indexOf(this.videoId) + 1;
+      console.log(index);
       console.log(this.playlistIds[index]);
       this.videoId = this.playlistIds[index];
     },
@@ -101,15 +122,7 @@ li {
 a {
   color: #42b983;
 }
-.row {
-  border: 3px solid red;
-}
-.col {
-  border: 3px dotted blue;
-}
-.container {
-  border: 1px solid yellow;
-}
+
 .player {
   height: 100vh;
   width: 100vw;
@@ -132,5 +145,12 @@ a {
 }
 .text {
   color: white;
+}
+.play-buttons {
+  border-radius: 20%;
+  width: 80px;
+  height: 40px;
+  background-color: #fdfbfe8c;
+  font-size: 1.5em;
 }
 </style>
