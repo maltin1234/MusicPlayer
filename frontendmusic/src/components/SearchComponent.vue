@@ -162,5 +162,6 @@ a {
 }
 .text {
   color: rgb(250, 245, 245);
+  cursor: pointer;
 }
 </style>

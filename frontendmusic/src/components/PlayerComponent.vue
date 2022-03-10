@@ -118,6 +118,7 @@ ul {
 li {
   display: inline-block;
   margin: 0 10px;
+  cursor: pointer;
 }
 a {
   color: #42b983;
@@ -145,6 +146,7 @@ a {
 }
 .text {
   color: white;
+  cursor: pointer;
 }
 .play-buttons {
   border-radius: 20%;
@@ -152,5 +154,6 @@ a {
   height: 40px;
   background-color: #fdfbfe8c;
   font-size: 1.5em;
+  cursor: pointer;
 }
 </style>
